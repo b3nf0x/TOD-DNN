@@ -4,8 +4,13 @@ import torch
 import numpy as np
 from dnn.basic_dnn import LinearModel
 
+def _normalize(l):
+        return [(element - np.mean(l)) / np.std(l) for element in l]
+
 
 if __name__=="__main__":
+
+    
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_path", type=str, required=True, default=None, help="path to model")
@@ -17,16 +22,18 @@ if __name__=="__main__":
 
     model = LinearModel()
     model.load_state_dict(torch.load(args.model_path))
-    X = torch.nn.functional.normalize(
-        torch.from_numpy(
-            np.array([np.array([
-                args.mass,
-                args.cf,
-                args.ambient_temp,
-                args.rectal_temp
-            ])])
-        ).float()
-    )
+    X = torch.from_numpy(
+        np.array([
+            np.array(
+                _normalize([
+                    args.mass,
+                    args.cf,
+                    args.ambient_temp,
+                    args.rectal_temp
+                ])
+            )
+        ])
+    ).float()
 
     result = model(X, None)
     print(result*12)

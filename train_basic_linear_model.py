@@ -22,7 +22,7 @@ def prepare_dataset(dataset_dir: str, batch_size: int = 8, shuffle=False):
 
 
 
-def train(epochs, dataset_dir, batch_size, logdir="logs/", model_dir="models/"):
+def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="models/"):
     if not os.path.isdir(model_dir): os.mkdir(model_dir)
     if not os.path.isdir(logdir): os.mkdir(logdir)
 
@@ -36,7 +36,7 @@ def train(epochs, dataset_dir, batch_size, logdir="logs/", model_dir="models/"):
             print("loading stat dict failed")
 
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    train_dataloader = prepare_dataset(dataset_dir=dataset_dir, batch_size=2048)
+    train_dataloader = prepare_dataset(dataset_dir=dataset_dir, batch_size=batch_size)
     step_counter: int = 0
     best_loss: int = 100 # dummy high score
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_dir", type=str, required=False, default="models/", help="path to save models")
     parser.add_argument("--model_save_steps", type=int, required=False, default=1000, help="")
     parser.add_argument("--epochs", type=int, required=False, default=100000, help="number of epochs to run")
-    parser.add_argument("--batch_size", type=int, required=False, default=8, help="number of epochs to run")
+    parser.add_argument("--batch_size", type=int, required=False, default=2048, help="number of epochs to run")
     args = parser.parse_args()
 
     train(epochs=args.epochs, dataset_dir=args.dataset_dir, batch_size=args.batch_size)

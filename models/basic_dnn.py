@@ -14,6 +14,7 @@ class LinearModel(nn.Module):
         out = self.input(X)
         out = self.activation(out)
         out = self.encode(out)
+        out = self.activation(out)
         out = self.decode(out)
         out = self.activation(out)
         return out

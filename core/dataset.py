@@ -3,7 +3,7 @@ import numpy as np
 from torch.utils.data import Dataset
 import torch
 from core.data_model import SynData
-from sklearn.preprocessing import normalize
+
 
 class Dataset(Dataset):
 

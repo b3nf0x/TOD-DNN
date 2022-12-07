@@ -19,12 +19,20 @@ class Dataset(torch.utils.data.Dataset):
 
 
     def __getitem__(self, idx):
-        # [(element - np.mean(l)) / np.std(l) for element in l]
+        # 
         return SynData.load_from_file(path=os.path.join(self.npy_files_dir, self.files[idx])).to_numpy_array()
+
+    def _normalize(self, element, l):
+        return (element - np.mean(l)) / np.std(l)
 
 
     def reprocess(self, data, idxs):
-        x = np.array([np.array([data[idx][0], data[idx][1], data[idx][2], data[idx][4]]) for idx in idxs])
+        x = np.array([np.array([
+            self._normalize(data[idx][0], data[idx]), 
+            self._normalize(data[idx][1], data[idx]), 
+            self._normalize(data[idx][2], data[idx]), 
+            self._normalize(data[idx][4], data[idx])])
+            for idx in idxs])
         y = np.array([np.array([data[idx][3]]) for idx in idxs])
         return (x, y)
 

@@ -1,11 +1,11 @@
 import os
 import numpy as np
-from torch.utils.data import Dataset
 import torch
+
 from core.data_model import SynData
 
 
-class Dataset(Dataset):
+class Dataset(torch.utils.data.Dataset):
 
     def __init__(self, npy_files_dir: str, batch_size: int = 8, drop_last=False):
         self.npy_files_dir = npy_files_dir

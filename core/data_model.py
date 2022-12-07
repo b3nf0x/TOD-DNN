@@ -1,10 +1,9 @@
 import numpy as np
 import secrets
 import os
-import torch
+
 
 class SynData:
-    normalised = None
 
     def __init__(self, mass, cf, static_ambient_temp, time_of_death, rectal_temp):
         self.mass = mass

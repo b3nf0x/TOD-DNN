@@ -58,16 +58,16 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
                     print(f"Epoch: {epoch}  Step: {step_counter}    Loss: {total_loss}")
 
         
-                '''
-                if step_counter % 100 == 0:
+                if step_counter % 10 == 0:
                     if best_loss > total_loss:
                         best_loss = total_loss
                         try: 
                             os.system("rm -r " + model_dir + "/*")
                         except: pass
+
                         torch.save(model.state_dict(), os.path.join(model_dir, str(step_counter)))
-                        print("model saved")
-                '''
+                        print(f"model saved, current best loss: {best_loss}")
+                
 
 
 if __name__ == "__main__":

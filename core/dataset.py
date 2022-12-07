@@ -46,7 +46,7 @@ class Dataset(Dataset):
 
 def to_device(data, device="cpu"):
     (x, y) = data
-    x = torch.from_numpy(x).float().to(device)
+    x = torch.from_numpy(x).to(device)
     x = torch.nn.functional.normalize(x)
     y = torch.from_numpy(y).to(device)
     y = torch.nn.functional.normalize(y)

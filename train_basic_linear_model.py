@@ -1,12 +1,13 @@
 import argparse
 import os
 import numpy as np
+from tqdm import tqdm
 
 from core.dataset import Dataset, to_device
 import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
-from models.basic_dnn import LinearModel, LinearModelLoss
+from dnn.basic_dnn import LinearModel, LinearModelLoss
 import torch.optim as optim
 
 
@@ -38,7 +39,7 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
     '''
     
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    train_dataloader = prepare_dataset(dataset_dir=dataset_dir, batch_size=batch_size)
+    train_dataloader = prepare_dataset(dataset_dir=dataset_dir, batch_size=batch_size, shuffle=True)
     step_counter: int = 0
     best_loss: int = 100 # dummy high score
 
@@ -67,7 +68,7 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
 
                         torch.save(model.state_dict(), os.path.join(model_dir, str(step_counter)))
                         print(f"model saved, current best loss: {best_loss}")
-                
+               
 
 
 if __name__ == "__main__":
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_dir", type=str, required=False, default="models/", help="path to save models")
     parser.add_argument("--model_save_steps", type=int, required=False, default=1000, help="")
     parser.add_argument("--epochs", type=int, required=False, default=100000, help="number of epochs to run")
-    parser.add_argument("--batch_size", type=int, required=False, default=2048, help="number of epochs to run")
+    parser.add_argument("--batch_size", type=int, required=False, default=4096, help="number of epochs to run")
     args = parser.parse_args()
 
     train(epochs=args.epochs, dataset_dir=args.dataset_dir, batch_size=args.batch_size)

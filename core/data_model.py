@@ -35,7 +35,7 @@ class SynData:
 
     @staticmethod
     def load_from_file(path):
-        npy_data = np.load(path)
+        npy_data = np.load(path, allow_pickle=True)
         return SynData(
             mass=npy_data[0],
             cf=npy_data[1],

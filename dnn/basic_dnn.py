@@ -4,19 +4,26 @@ import torch.nn as nn
 class LinearModel(nn.Module):
     def __init__(self):
         super(LinearModel, self).__init__()
-        self.input = nn.Linear(4, 20)
-        self.encode = nn.Linear(20, 256)
-        self.decode = nn.Linear(256, 1)
+        self.input = nn.Linear(4, 8)
+        self.encode = nn.Linear(8, 16)
+        self.decode = nn.Linear(16, 1)
         self.activation = nn.LeakyReLU()
+        self.dropout = nn.Dropout(.5)
+        self.softmax = nn.Softmax()
 
 
     def forward(self, X, Y):
+
         out = self.input(X)
         out = self.activation(out)
+
         out = self.encode(out)
         out = self.activation(out)
+        out = self.dropout(out)
+
         out = self.decode(out)
-        out = self.activation(out)
+        #out = self.activation(out)
+
         return out
 
 

@@ -23,10 +23,10 @@ if __name__=="__main__":
 
     for i in tqdm(range(0, args.desired_dataset_length)):
         # base profile parameters
-        random_mass = random.randint(args.min_mass, args.max_mass)
-        random_cf = random.choice(correction_factors)
-        random_static_ambient_temp = random.randint(args.min_ambient_temp, args.max_ambient_temp)
-        random_time_of_death = random.randint(0, args.max_time_delta)
+        random_mass = random.randint(args.min_mass, args.max_mass) # 71 
+        random_cf = random.choice(correction_factors) # 7
+        random_static_ambient_temp = random.randint(args.min_ambient_temp, args.max_ambient_temp) # 46 
+        random_time_of_death = random.randint(0, args.max_time_delta) # 12
 
         temp_dataset: list = []
 

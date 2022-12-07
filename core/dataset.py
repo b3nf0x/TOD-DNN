@@ -49,5 +49,5 @@ def to_device(data, device="cpu"):
     x = torch.from_numpy(x).to(device)
     x = torch.nn.functional.normalize(x)
     y = torch.from_numpy(y).to(device)
-    y = torch.nn.functional.normalize(y)
+    y = y / 12 # max delta time
     return (x.float(), y.float())

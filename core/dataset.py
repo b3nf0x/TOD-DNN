@@ -19,6 +19,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
     def __getitem__(self, idx):
+        # [(element - np.mean(l)) / np.std(l) for element in l]
         return SynData.load_from_file(path=os.path.join(self.npy_files_dir, self.files[idx])).to_numpy_array()
 
 

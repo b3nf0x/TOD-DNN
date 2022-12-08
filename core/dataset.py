@@ -5,17 +5,18 @@ import torch
 from core.data_model import SynData
 
 
-STD = 32.917432424277116
-MEAN = 27.674800987098454
-
-
 class Dataset(torch.utils.data.Dataset):
 
-    def __init__(self, npy_files_dir: str, batch_size: int = 8, drop_last=False):
+    STD: float
+    MEAN: float
+
+    def __init__(self, npy_files_dir: str, STD: float, MEAN: float, batch_size: int = 8, drop_last=False):
         self.npy_files_dir = npy_files_dir
         self.batch_size = batch_size
         self.drop_last = drop_last
         self.files = os.listdir(self.npy_files_dir)
+        self.STD = STD
+        self.MEAN = MEAN
 
 
     def __len__(self):
@@ -26,7 +27,7 @@ class Dataset(torch.utils.data.Dataset):
         return SynData.load_from_file(path=os.path.join(self.npy_files_dir, self.files[idx])).to_numpy_array()
 
     def _normalize(self, element, l):
-        return (element - MEAN) / STD
+        return (element - self.MEAN) / self.STD
 
 
     def reprocess(self, data, idxs):

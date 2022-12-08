@@ -4,14 +4,16 @@ import torch.nn as nn
 class LinearModel(nn.Module):
     def __init__(self):
         super(LinearModel, self).__init__()
-        self.input = nn.Linear(4, 128)
-        self.encode1 = nn.Linear(128, 2048)
+        self.input = nn.Linear(4, 256)
+
+        self.encode1 = nn.Linear(256, 2048)
         self.encode2 = nn.Linear(2048, 512)
+        
         self.decode1 = nn.Linear(512, 8)
         self.decode2 = nn.Linear(8, 1)
 
         self.activation = nn.ReLU()
-        self.dropout = nn.Dropout(.4)
+        self.dropout = nn.Dropout(.3)
         self.final = nn.Sigmoid()
 
 
@@ -34,8 +36,6 @@ class LinearModel(nn.Module):
         out = self.dropout(out)
 
         out = self.decode2(out)
-        # out = self.activation(out)
-        # out = self.dropout(out)
 
         out = self.final(out)
 

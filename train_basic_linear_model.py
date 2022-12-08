@@ -11,8 +11,8 @@ from dnn.basic_dnn import LinearModel, LinearModelLoss
 import torch.optim as optim
 
 
-def prepare_dataset(dataset_dir: str, batch_size: int = 8, shuffle=False):
-    train_dataset = Dataset(dataset_dir, batch_size)
+def prepare_dataset(dataset_dir: str, STD, MEAN, batch_size: int = 8, shuffle=False):
+    train_dataset = Dataset(npy_files_dir=dataset_dir, batch_size=batch_size, STD=STD, MEAN=MEAN)
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -23,7 +23,7 @@ def prepare_dataset(dataset_dir: str, batch_size: int = 8, shuffle=False):
 
 
 
-def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="models/"):
+def train(epochs, dataset_dir, STD, MEAN, batch_size=2048, logdir="logs/", model_dir="models/"):
     if not os.path.isdir(model_dir): os.mkdir(model_dir)
     if not os.path.isdir(logdir): os.mkdir(logdir)
 
@@ -32,7 +32,7 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
 
     
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    train_dataloader = prepare_dataset(dataset_dir=dataset_dir, batch_size=batch_size, shuffle=True)
+    train_dataloader = prepare_dataset(dataset_dir=dataset_dir, STD=STD, MEAN=MEAN, batch_size=batch_size, shuffle=True)
     step_counter: int = 0
     best_loss: int = 100 # dummy high score
 
@@ -43,25 +43,20 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
                 batch = to_device(batch)
                 output = model(*batch)
                 total_loss = loss(*batch, output)
-                
-                # print(f"100th element X: {batch[0][100]}")
-                # print(f"sample diff: {output[10]*12 - batch[1][10]*12}")
-
                 total_loss.backward()
                 optimizer.step()
                 nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 step_counter += 1
 
                 if step_counter % 100 == 0:
-                    print(f"Epoch: {epoch}  Step: {step_counter}    Loss: {total_loss}")
-
+                    print(f"Epoch: {epoch} --- Step: {step_counter} --- Loss: {total_loss} --- Max error: {torch.max((output-batch[1]))*12} --- Avg. error: {torch.mean((output-batch[1]))*12}")
         
                 if step_counter % 10 == 0:
                     if best_loss > total_loss:
                         best_loss = total_loss
-                        try: 
-                            os.system("rm -r " + model_dir + "/*")
-                        except: pass
+                        #try: 
+                        #    os.system("rm -r " + model_dir + "/*")
+                        # except: pass
 
                         torch.save(model.state_dict(), os.path.join(model_dir, str(step_counter)))
                         print(f"model saved, current best loss: {best_loss}")
@@ -75,9 +70,11 @@ if __name__ == "__main__":
     parser.add_argument("--model_save_steps", type=int, required=False, default=1000, help="")
     parser.add_argument("--epochs", type=int, required=False, default=100000, help="number of epochs to run")
     parser.add_argument("--batch_size", type=int, required=False, default=4096, help="number of epochs to run")
+    parser.add_argument("--dataset_std", type=float, required=False, default=32.917432, help="")
+    parser.add_argument("--dataset_mean", type=float, required=False, default=27.674800, help="")
     args = parser.parse_args()
 
-    train(epochs=args.epochs, dataset_dir=args.dataset_dir, batch_size=args.batch_size)
+    train(epochs=args.epochs, STD=args.dataset_std, MEAN=args.dataset_mean, dataset_dir=args.dataset_dir, batch_size=args.batch_size)
 
 
 

@@ -30,13 +30,6 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
     loss = LinearModelLoss() #.to("cuda")
     model = LinearModel() #.to("cuda")
 
-    '''
-    if len(os.listdir(model_dir)) == 1:
-        try:
-            model.load_state_dict(torch.load(os.path.join(model_dir, os.listdir(model_dir)[0])))
-        except:
-            print("loading stat dict failed")
-    '''
     
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     train_dataloader = prepare_dataset(dataset_dir=dataset_dir, batch_size=batch_size, shuffle=True)
@@ -50,6 +43,10 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
                 batch = to_device(batch)
                 output = model(*batch)
                 total_loss = loss(*batch, output)
+                
+                print(f"100th element X: {batch[0][100]}")
+                print(f"sample diff, orig: {batch[1][100]*12} pred: {output[100]*12}")
+
                 total_loss.backward()
                 optimizer.step()
                 nn.utils.clip_grad_norm_(model.parameters(), 1.0)

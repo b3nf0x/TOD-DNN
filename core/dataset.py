@@ -19,7 +19,6 @@ class Dataset(torch.utils.data.Dataset):
 
 
     def __getitem__(self, idx):
-        # 
         return SynData.load_from_file(path=os.path.join(self.npy_files_dir, self.files[idx])).to_numpy_array()
 
     def _normalize(self, element, l):
@@ -56,7 +55,6 @@ class Dataset(torch.utils.data.Dataset):
 def to_device(data, device="cpu"):
     (x, y) = data
     x = torch.from_numpy(x).to(device)
-    x = torch.nn.functional.normalize(x)
     y = torch.from_numpy(y).to(device)
     y = y / 12 # max delta time
     return (x.float(), y.float())

@@ -5,24 +5,26 @@ class LinearModel(nn.Module):
     def __init__(self):
         super(LinearModel, self).__init__()
         self.input = nn.Linear(4, 8)
-        self.encode = nn.Linear(8, 16)
-        self.decode = nn.Linear(16, 1)
-        self.activation = nn.LeakyReLU()
+        self.encode = nn.Linear(8, 32)
+        self.decode = nn.Linear(32, 1)
+        self.activation = nn.ReLU()
         self.dropout = nn.Dropout(.5)
-        self.softmax = nn.Softmax()
+        self.softmax = nn.Sigmoid()
 
 
     def forward(self, X, Y):
 
         out = self.input(X)
         out = self.activation(out)
+        out = self.dropout(out)
 
         out = self.encode(out)
         out = self.activation(out)
         out = self.dropout(out)
 
         out = self.decode(out)
-        #out = self.activation(out)
+        out = self.activation(out)
+        # out = self.softmax(out)
 
         return out
 

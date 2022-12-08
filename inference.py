@@ -26,7 +26,9 @@ if __name__=="__main__":
 
     X = torch.from_numpy(
         np.array([
-            np.array(_normalize([args.mass, args.cf, args.ambient_temp, args.rectal_temp], STD=args.dataset_std, MEAN=args.dataset_mean))
+            np.array(
+                _normalize([args.mass, args.cf, args.ambient_temp, args.rectal_temp], STD=args.dataset_std, MEAN=args.dataset_mean)
+            )
         ])
     ).float()
 

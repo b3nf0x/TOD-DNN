@@ -28,10 +28,7 @@ class SynData:
 
 
     def save_as_npy(self, path):
-        np.save(
-            os.path.join(path, self.file_name), 
-            self.to_numpy_array()
-        )
+        np.save(os.path.join(path, self.file_name), self.to_numpy_array())
 
     @staticmethod
     def load_from_file(path):

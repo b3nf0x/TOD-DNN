@@ -45,7 +45,7 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
                 total_loss = loss(*batch, output)
                 
                 # print(f"100th element X: {batch[0][100]}")
-                print(f"sample diff, orig: {batch[1][100]*12} pred: {output[100]*12}")
+                print(f"sample diff: {output[100]*12 - batch[1][100]*12}")
 
                 total_loss.backward()
                 optimizer.step()

@@ -4,9 +4,9 @@ import torch.nn as nn
 class LinearModel(nn.Module):
     def __init__(self):
         super(LinearModel, self).__init__()
-        self.input = nn.Linear(4, 8)
-        self.encode = nn.Linear(8, 32)
-        self.decode = nn.Linear(32, 1)
+        self.input = nn.Linear(4, 32)
+        self.encode = nn.Linear(32, 256)
+        self.decode = nn.Linear(256, 1)
         self.activation = nn.ReLU()
         self.dropout = nn.Dropout(.5)
         self.softmax = nn.Sigmoid()
@@ -24,7 +24,8 @@ class LinearModel(nn.Module):
 
         out = self.decode(out)
         out = self.activation(out)
-        # out = self.softmax(out)
+        out = self.dropout(out)
+        out = self.softmax(out)
 
         return out
 

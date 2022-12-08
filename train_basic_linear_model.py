@@ -45,14 +45,14 @@ def train(epochs, dataset_dir, batch_size=2048, logdir="logs/", model_dir="model
                 total_loss = loss(*batch, output)
                 
                 # print(f"100th element X: {batch[0][100]}")
-                print(f"sample diff: {output[100]*12 - batch[1][100]*12}")
+                # print(f"sample diff: {output[10]*12 - batch[1][10]*12}")
 
                 total_loss.backward()
                 optimizer.step()
                 nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 step_counter += 1
 
-                if step_counter % 10 == 0:
+                if step_counter % 100 == 0:
                     print(f"Epoch: {epoch}  Step: {step_counter}    Loss: {total_loss}")
 
         

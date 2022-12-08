@@ -13,5 +13,5 @@ if __name__ == "__main__":
     for item in os.listdir(args.dataset_dir):
         [tmp_list.append(n) for n in np.array(np.load(os.path.join(args.dataset_dir, item)))]
     
-    print("std:  " + np.std(np.array(tmp_list)))
-    print("mean: " + np.mean(np.array(tmp_list)))
+    print(f"std:  {np.std(np.array(tmp_list))}")
+    print(f"mean: {np.mean(np.array(tmp_list))}")

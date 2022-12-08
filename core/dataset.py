@@ -9,14 +9,16 @@ class Dataset(torch.utils.data.Dataset):
 
     STD: float
     MEAN: float
+    max_delta_time: float
 
-    def __init__(self, npy_files_dir: str, STD: float, MEAN: float, batch_size: int = 8, drop_last=False):
+    def __init__(self, npy_files_dir: str, STD: float, MEAN: float, batch_size: int = 8, drop_last=False, max_delta_time=12):
         self.npy_files_dir = npy_files_dir
         self.batch_size = batch_size
         self.drop_last = drop_last
         self.files = os.listdir(self.npy_files_dir)
         self.STD = STD
         self.MEAN = MEAN
+        self.max_delta_time =  max_delta_time
 
 
     def __len__(self):
@@ -26,18 +28,18 @@ class Dataset(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         return SynData.load_from_file(path=os.path.join(self.npy_files_dir, self.files[idx])).to_numpy_array()
 
-    def _normalize(self, element, l):
+    def _normalize(self, element):
         return (element - self.MEAN) / self.STD
 
 
     def reprocess(self, data, idxs):
         x = np.array([np.array([
-            self._normalize(data[idx][0], data[idx]), 
-            self._normalize(data[idx][1], data[idx]), 
-            self._normalize(data[idx][2], data[idx]), 
-            self._normalize(data[idx][4], data[idx])])
+            self._normalize(data[idx][0]), 
+            self._normalize(data[idx][1]), 
+            self._normalize(data[idx][2]), 
+            self._normalize(data[idx][4])])
             for idx in idxs])
-        y = np.array([np.array([data[idx][3]]) for idx in idxs])
+        y = np.array([np.array([data[idx][3]]) for idx in idxs]) / self.max_delta_time
         return (x, y)
 
 
@@ -61,5 +63,4 @@ def to_device(data, device="cpu"):
     (x, y) = data
     x = torch.from_numpy(x).to(device)
     y = torch.from_numpy(y).to(device)
-    y = y / 12 # max delta time
     return (x.float(), y.float())

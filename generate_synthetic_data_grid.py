@@ -15,7 +15,7 @@ if __name__=="__main__":
     dataset: list = []
     for mass in tqdm(range(50, 122)): # mass
         for cf in correction_factors: # each cf
-            for ambient_T in range(-10, 37): # ambient temp
+            for ambient_T in range(-10, 37+1): # ambient temp
                 for tod in range(0, args.max_delta_time+1):
                     dataset.append(
                         SynData(

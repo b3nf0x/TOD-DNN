@@ -5,8 +5,6 @@ https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-019-0920-
 
 
 import math
-import numpy as np
-
 
 INIT_BODY_TEMP = 37.2
 

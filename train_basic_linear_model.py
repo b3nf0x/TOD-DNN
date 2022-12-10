@@ -22,7 +22,6 @@ def prepare_dataset(dataset_dir: str, STD, MEAN, batch_size: int = 8, shuffle=Fa
     return train_dataloader
 
 
-
 def train(epochs, dataset_dir, STD, MEAN, batch_size=2048, logdir="logs/", model_dir="models/"):
     if not os.path.isdir(model_dir): os.mkdir(model_dir)
     if not os.path.isdir(logdir): os.mkdir(logdir)
@@ -61,7 +60,6 @@ def train(epochs, dataset_dir, STD, MEAN, batch_size=2048, logdir="logs/", model
                         torch.save(model.state_dict(), os.path.join(model_dir, str(step_counter)))
                         print(f"model saved, current best loss: {best_loss}")
                
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
